@@ -1,4 +1,54 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
 
 body{
-    background-color: gray;
+background:#f5f7fb;
 }
+
+header{
+
+background:#1565C0;
+color:white;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:15px 40px;
+
+}
+
+.logo{
+
+display:flex;
+align-items:center;
+gap:15px;
+
+}
+
+.logo img{
+
+width:55px;
+height:55px;
+border-radius:50%;
+
+}
+
+nav{
+
+display:flex;
+gap:20px;
+
+}
+
+nav a{
+
+color:white;
+text-decoration:none;
+
+}
+

@@ -1,8 +1,8 @@
 <?php
-
+/*
 session_start();
 
-$name = $email = $createpassword = $confirmpassword = $usertype = "";
+$firstname = $middlename =$lastname $email = $createpassword = $confirmpassword = $usertype = "";
 
 if(isset($_POST["register"])){
 
@@ -34,7 +34,8 @@ if(isset($_POST["register"])){
         header("location: loginForm.php");
         }
         else{
-            echo "<h1> password not macth hahahaha</h1>";
+            
+            echo " password not macth hahahaha";
         }
 
        }
@@ -46,53 +47,125 @@ if(isset($_POST["register"])){
    
    
 }
+       */
 
 ?>
 
-<!-- registerForm.php -->
-<!DOCTYPE html>
+
+
+
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Page</title>
-    <link rel="stylesheet" href="register.css">
-    
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elementary School MLS - Sign Up</title>
+    <link rel="stylesheet" href="register.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  </head>
 
-<div class="logo2">
-    <h2>CATBALOGAN CITY</h2>
-    <img src="./img/logo.jpg" alt="">
-  </div>
 
-<div id="createAccountForm">
-    
-    <form action="registerForm.php" method="post">
-    <h2>Create Account</h2>
-        <label for="name">Name</label><br>
-        <input type="text" name="name" id="name" placeholder="Name" required><br>
+  <body>
+    <div class="container">
+      <div class="left">
+        
+        <img src="img/logo.jpg" class="logo" />
 
-        <label for="email">Email</label><br>
-        <input type="email" name="email" id="email" placeholder="Enter Email"  required><br>
+        <h1>Elementary School</h1>
+        <h2>Management Learning System</h2>
 
-        <label for="createpassword">Password</label><br>
-        <input type="password" name="createpassword" id="createpassword" placeholder="Password" required><br>
+        <p>
+          Create your MLS account to access learning materials, announcements,
+          grades, attendance, and school activities. Join our digital learning
+          community today.
+        </p>
 
-        <label for="confirmpassword">Confirm Password</label><br>
-        <input type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirm Password" required><br>
+      </div>
 
-        <label>User Type:
+
+
+      <div class="right">
+        <form action="register.php" method="POST">
+          <h2>Create Account</h2>
+
+          <p>Fill in the information below.</p>
+
+          <div class="input-box">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" name="firstname"  placeholder="First Name" required />
+          </div>
+
+          <div class="input-box">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" name="middlename" placeholder="Middle Name" />
+          </div>
+
+          <div class="input-box">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" name="lastname" placeholder="Last Name" required />
+          </div>
+
+          <div class="input-box">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" name="email" placeholder="Email Address" required />
+          </div>
+
+          <div class="input-box">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="password" name="createpassword" placeholder="Password" required/>
+          </div>
+
+          <div class="input-box">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="confirmPassword" name="confirmpassword" placeholder="Confirm Password" required />
+          </div>
+
+          <div class="input-box">
+
             <select name="usertype" required>
-                <option value="1">Admin</option>
-                <option value="0">User</option>
-            </select>
-        </label><br>
+              <option value="" disabled selected>Select User Type</option>
 
-        <input type="submit" name="register" value="Submit">
-        <p>Already have an account? <a href="loginForm.php">Log In</a></p>
-    </form>
-    
-</div>
-</body>
+              <option value="1">Administrator</option>
+
+              <option value="2">Teacher</option>
+
+              <option value="0">Student</option>
+            </select>
+          </div>
+
+          <div class="options">
+            <label>
+              <input type="checkbox" onclick="showPassword()" />
+               Show Password
+            </label>
+          </div>
+
+          <button type="submit" name="register">Create Account</button>
+
+          <p class="login">  Already have an account? <a href="login.php"> Login Here </a></p>
+
+        </form>
+      </div>
+    </div>
+
+
+
+    <script>
+      function showPassword() {
+        var pass = document.getElementById("password");
+        var confirm = document.getElementById("confirmPassword");
+
+        if (pass.type === "password") {
+          pass.type = "text";
+          confirm.type = "text";
+        } else {
+          pass.type = "password";
+          confirm.type = "password";
+        }
+      }
+    </script>
+
+
+
+  </body>
 </html>

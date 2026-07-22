@@ -4,7 +4,7 @@
 $server = "localhost";
 $username = "root";
 $password = "";
-$db_name = "catbadb";
+$db_name = "schooldb";
 $con = "";
 
 
