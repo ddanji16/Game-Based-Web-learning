@@ -1,9 +1,9 @@
 <?php
 
-/*
-session_start();
+    session_start();
+    include '../Admin-folder/database.php';
+    $invalid = "";
 
-$email = $password = "";
 
 
 if(isset($_POST["login"])){
@@ -11,35 +11,24 @@ if(isset($_POST["login"])){
     $useremail = $_POST["email"];
     $userpassword = $_POST["password"];
 
-    if(empty($useremail)){
-        echo"Empty Email";
-    }
-    elseif(empty($userpassword)){
-        echo"Empty password";
-    }
-    elseif(empty($_SESSION["email"])){
-        echo "no email register";
-    }
-    elseif (empty($_SESSION["email"])){
-        echo "no password register";
-    }
 
-    elseif($useremail ==  $_SESSION["email"] && $userpassword  == $_SESSION["createpassword"]) {
+    if($useremail ==  $_SESSION["email"] && $userpassword  == $_SESSION["createpassword"]) {
       
          if($_SESSION["usertype"] == 0){
-            header("location: index.php");
+            header("location: ../index.php");
+
         }
          elseif($_SESSION["usertype"] == 1){
-            header("location: dashboard.php");
+            header("location: ../Admin-folder/admin.php");
     }
   }
 else{
-    echo "Invalid input";
+    $invalid = "Username invalid ";
 }
 
 }
-*/
 
+ 
 
 ?>
 <!DOCTYPE html>
@@ -99,9 +88,11 @@ else{
             </div>
 
 
-            <button type="submit"> Login </button>
+            <button type="submit" value="login" name="login"> Login </button>
+            <span class="err"><?= $invalid?></span><br> 
 
             <p class="register"> Don't have an account?  <a href="Register.php"> Register Here  </a>
+
             </p>
         </form>
     </div>

@@ -1,54 +1,49 @@
 <?php
-/*
-session_start();
 
-$firstname = $middlename =$lastname $email = $createpassword = $confirmpassword = $usertype = "";
+session_start();  
+include '../Admin-folder/database.php';
+
+
 
 if(isset($_POST["register"])){
 
+ if($_POST["createpassword"] == $_POST["confirmpassword"]){
 
-    if(empty($_POST["name"])) {     
-        echo "incomplete Empty  name";      
-       
-    }
-    elseif(empty($_POST["email"])){
-        echo "incomplete Empty Email";
-    }
-    elseif (empty($_POST["createpassword"])){
-        echo "incomplete Empty password";
-    }
+    $firstname = $_POST["firstname"];
+    $middlename = $_POST["middlename"];
+    $lastname = $_POST["lastname"];
+    $email = $_POST["email"];
+    $createpassword = $_POST["createpassword"];
+    $confirmpassword = $_POST["confirmpassword"];
+    $usertype = $_POST["usertype"];
 
-    elseif(empty($_POST["confirmpassword"])){
-        echo "incomplete empty confirmpassword";
-    }
-    elseif(!empty($_POST["name"]) &&  !empty($_POST["email"]) &&  !empty($_POST["createpassword"]) && !empty($_POST["confirmpassword"])){
 
-        if($_POST["createpassword"] == $_POST["confirmpassword"]){
+    $_SESSION['name']= $firstname;  
+    $_SESSION['middlename']= $middlename;
+    $_SESSION['lastname']= $lastname;
+    $_SESSION['email']= $email;
+    $_SESSION['createpassword']= $createpassword;
+    $_SESSION['confirmpassword']= $confirmpassword;
+    $_SESSION['usertype']= $usertype;
 
-        $_SESSION["name"] = $_POST["name"];
-        $_SESSION["email"] = $_POST["email"];
-        $_SESSION["createpassword"] = $_POST["createpassword"];
-        $_SESSION["confirmpassword"]  = $_POST["confirmpassword"];
-        $_SESSION["usertype"] = $_POST["usertype"];
+    
 
-        header("location: loginForm.php");
+    $quary = "INSERT INTO users (firstname, middlename, lastname, Email, createpassword, confirmpassword, usertype) VALUES ('$firstname', '$middlename', '$lastname', '$email', '$createpassword', '$confirmpassword', '$usertype')";
+    $quary_run = mysqli_query($con, $quary);
+
+        if($quary_run){
+            header("location: login.php");
         }
         else{
-            
-            echo " password not macth hahahaha";
+            echo"Not Register Not inserted to database";
         }
-
-       }
-       
-      
-      
-      
     
-   
-   
-}
-       */
+    
+ }
+else{
+    echo '<script>alert("Password does not match")</script>';
 
+}}
 ?>
 
 
@@ -92,7 +87,7 @@ if(isset($_POST["register"])){
 
           <div class="input-box">
             <i class="fa-solid fa-user"></i>
-            <input type="text" name="firstname"  placeholder="First Name" required />
+            <input type="text" name="firstname"  placeholder="First Name" />
           </div>
 
           <div class="input-box">

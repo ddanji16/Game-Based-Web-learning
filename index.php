@@ -33,7 +33,7 @@
 
 <a href="#"><i class="fa fa-user"></i> Profile</a>
 
-<a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a>
+<li><a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a></li>
 
 </nav>
 
