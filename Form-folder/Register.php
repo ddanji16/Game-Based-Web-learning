@@ -122,7 +122,9 @@ else{
             <select name="usertype" required>
               <option value="" disabled selected>Select User Type</option>
 
+              <!--
               <option value="1">Administrator</option>
+              -->
 
               <option value="2">Teacher</option>
 

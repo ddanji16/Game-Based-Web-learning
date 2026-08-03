@@ -9,7 +9,7 @@ if (!isset($_SESSION['usertype']) || (int) $_SESSION['usertype'] !== 1) {
 
 function e($value) { return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8'); }
 function tableExists($connection, $table) {
-    $statement = mysqli_prepare($connection, 'SHOW TABLES LIKE ?');
+    $statement = mysqli_prepare($connection, 'SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ? LIMIT 1');
     mysqli_stmt_bind_param($statement, 's', $table);
     mysqli_stmt_execute($statement);
     return mysqli_num_rows(mysqli_stmt_get_result($statement)) > 0;
@@ -135,7 +135,7 @@ $notifications = mysqli_query($con, "SELECT title, message, audience, created_at
         <aside class="sidebar" id="sidebar"><a class="brand" href="#overview"><span
                     class="brand-mark">J</span><span>Jidanao <b>LMS</b></span></a>
             <nav><a class="active" href="#overview"><i class="fa-solid fa-grid-2"></i> Overview</a><a href="#courses"><i
-                        class="fa-solid fa-book-open"></i> Courses</a><a href="#people"><i
+                        class="fa-solid fa-book-open"></i> Courses</a><a href="users.php"><i
                         class="fa-solid fa-users"></i> Users</a><a href="#enrollments"><i
                         class="fa-solid fa-user-plus"></i> Enrollments</a><a href="#notifications"><i
                         class="fa-solid fa-bell"></i> Notifications</a><a href="#activity"><i

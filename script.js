@@ -25,3 +25,11 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 revealItems.forEach((item) => revealObserver.observe(item));
 document.getElementById('year').textContent = new Date().getFullYear();
+
+document.querySelectorAll('.quarter-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.quarter-tab, .module-panel').forEach((item) => item.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.quarter)?.classList.add('active');
+    });
+});
