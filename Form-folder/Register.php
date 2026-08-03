@@ -7,14 +7,14 @@ include '../Admin-folder/database.php';
 
 if(isset($_POST["register"])){
 
- if($_POST["createpassword"] == $_POST["confirmpassword"]){
+ if($_POST["createpassword"] === $_POST["confirmpassword"]){
 
     $firstname = $_POST["firstname"];
     $middlename = $_POST["middlename"];
     $lastname = $_POST["lastname"];
     $email = $_POST["email"];
-    $createpassword = $_POST["createpassword"];
-    $confirmpassword = $_POST["confirmpassword"];
+    // Store a one-way hash, never the user's actual password.
+    $passwordHash = password_hash($_POST["createpassword"], PASSWORD_DEFAULT);
     $usertype = $_POST["usertype"];
 
 
@@ -22,14 +22,16 @@ if(isset($_POST["register"])){
     $_SESSION['middlename']= $middlename;
     $_SESSION['lastname']= $lastname;
     $_SESSION['email']= $email;
-    $_SESSION['createpassword']= $createpassword;
-    $_SESSION['confirmpassword']= $confirmpassword;
     $_SESSION['usertype']= $usertype;
 
     
 
-    $quary = "INSERT INTO users (firstname, middlename, lastname, Email, createpassword, confirmpassword, usertype) VALUES ('$firstname', '$middlename', '$lastname', '$email', '$createpassword', '$confirmpassword', '$usertype')";
-    $quary_run = mysqli_query($con, $quary);
+    $query = "INSERT INTO users (firstname, middlename, lastname, Email, createpassword, confirmpassword, usertype) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $statement = mysqli_prepare($con, $query);
+
+    // Keep the existing confirmation column hashed too; it contains no plaintext password.
+    mysqli_stmt_bind_param($statement, "ssssssi", $firstname, $middlename, $lastname, $email, $passwordHash, $passwordHash, $usertype);
+    $quary_run = mysqli_stmt_execute($statement);
 
         if($quary_run){
             header("location: login.php");

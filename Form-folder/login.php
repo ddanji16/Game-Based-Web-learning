@@ -11,12 +11,14 @@ if(isset($_POST["login"])){
     $useremail = $_POST["email"];
     $userpassword = $_POST["password"];
 
-    $query = "SELECT * FROM users WHERE Email='$useremail' AND createpassword='$userpassword'";
-    $query_run = mysqli_query($con, $query);
+    $query = "SELECT * FROM users WHERE Email = ? LIMIT 1";
+    $statement = mysqli_prepare($con, $query);
+    mysqli_stmt_bind_param($statement, "s", $useremail);
+    mysqli_stmt_execute($statement);
+    $query_run = mysqli_stmt_get_result($statement);
+    $row = mysqli_fetch_assoc($query_run);
 
-    if(mysqli_num_rows($query_run) > 0){
-
-        $row = mysqli_fetch_assoc($query_run);
+    if($row && password_verify($userpassword, $row["createpassword"])){
 
         $_SESSION["email"] = $row["Email"];
         $_SESSION["usertype"] = $row["usertype"];
@@ -101,7 +103,7 @@ if(isset($_POST["login"])){
 
 
             <button type="submit" value="login" name="login"> Login </button>
-            <span class="err"><?= $invalid?></span><br> 
+            <span style="color: red; margin-left: 90px; margin-top:20px;" class="err"><?= $invalid?></span><br> 
 
             <p class="register"> Don't have an account?  <a href="Register.php"> Register Here  </a>
 
