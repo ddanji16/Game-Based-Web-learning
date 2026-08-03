@@ -18,21 +18,34 @@ if(isset($_POST["login"])){
     $query_run = mysqli_stmt_get_result($statement);
     $row = mysqli_fetch_assoc($query_run);
 
-    if($row && password_verify($userpassword, $row["createpassword"])){
+    $validPassword = $row && password_verify($userpassword, $row["createpassword"]);
+
+    // Let existing plaintext accounts sign in once, then upgrade them immediately.
+    if ($row && !$validPassword && hash_equals($row["createpassword"], $userpassword)) {
+        $newHash = password_hash($userpassword, PASSWORD_DEFAULT);
+        $upgrade = mysqli_prepare($con, "UPDATE users SET createpassword = ?, confirmpassword = ? WHERE id = ?");
+        mysqli_stmt_bind_param($upgrade, "ssi", $newHash, $newHash, $row["id"]);
+        mysqli_stmt_execute($upgrade);
+        $validPassword = true;
+    }
+
+    if($validPassword){
 
         $_SESSION["email"] = $row["Email"];
-        $_SESSION["usertype"] = $row["usertype"];
+        $userRole = (int) $row["UserType"];
+        $_SESSION["usertype"] = $userRole;
         $_SESSION["firstname"] = $row["firstname"];
+        $_SESSION["user_id"] = $row["id"];
 
-        if($row["usertype"] == 0){
+        if($userRole === 0){
             header("location: ../index.php");
             exit();
         }
-        elseif($row["usertype"] == 1){
-            header("location: ../Admin-folder/admin.php");
+        elseif($userRole === 1){
+            header("location: ../Admin-folder/Dashboard.php");
             exit();
         }
-        elseif($row["usertype"] == 2){
+        elseif($userRole === 2){
             header("location: ../Teacher-folder/teacher.php");
             exit();
         }
