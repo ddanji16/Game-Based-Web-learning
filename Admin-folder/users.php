@@ -1,6 +1,4 @@
-Here is the same PHP code formatted more clearly. I also corrected `**DIR**` to `__DIR__`.
 
-```php
 <?php
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -308,16 +306,12 @@ $progress = mysqli_query(
           ><span class="brand-mark">J</span><span>Jidanao <b>LMS</b></span></a
         >
         <nav>
-          <a href="Dashboard.php"><i class="fa-solid fa-grid-2"></i> Overview</a
-          ><a href="Dashboard.php#courses"
-            ><i class="fa-solid fa-book-open"></i> Courses</a
-          ><a class="active" href="users.php"
-            ><i class="fa-solid fa-users"></i> Users</a
-          ><a href="Dashboard.php#enrollments"
-            ><i class="fa-solid fa-user-plus"></i> Enrollments</a
-          ><a href="Dashboard.php#notifications"
-            ><i class="fa-solid fa-bell"></i> Notifications</a
-          >
+<a href="Dashboard.php"><i class="fa-solid fa-grid-2"></i> Overview</a>
+          <a href="Dashboard.php#courses"><i class="fa-solid fa-book-open"></i> Courses</a>
+          <a class="active" href="users.php"><i class="fa-solid fa-users"></i> Users</a>
+          <a href="messages.php"><i class="fa-solid fa-envelope"></i> Messages</a>
+          <a href="notifications.php"><i class="fa-solid fa-bell"></i> Notifications</a>
+          <a href="activity.php"><i class="fa-solid fa-clock-rotate-left"></i> Activity logs</a>
         </nav>
         <a class="logout" href="../logout.php"
           ><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</a

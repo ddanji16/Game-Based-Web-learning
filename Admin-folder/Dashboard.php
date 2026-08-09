@@ -132,13 +132,13 @@ $notifications = mysqli_query($con, "SELECT title, message, audience, created_at
 
 <body>
     <div class="app-shell">
-        <aside class="sidebar" id="sidebar"><a class="brand" href="#overview"><span
+<aside class="sidebar" id="sidebar"><a class="brand" href="#overview"><span
                     class="brand-mark">J</span><span>Jidanao <b>LMS</b></span></a>
-            <nav><a class="active" href="#overview"><i class="fa-solid fa-grid-2"></i> Overview</a><a href="#courses"><i
-                        class="fa-solid fa-book-open"></i> Courses</a><a href="users.php"><i
-                        class="fa-solid fa-users"></i> Users</a><a href="#enrollments"><i
-                        class="fa-solid fa-user-plus"></i> Enrollments</a><a href="#notifications"><i
-                        class="fa-solid fa-bell"></i> Notifications</a><a href="#activity"><i
+<nav><a class="active" href="#overview"><i class="fa-solid fa-grid-2"></i> Overview</a><a
+                        href="#courses"><i class="fa-solid fa-book-open"></i> Courses</a><a href="users.php"><i
+                        class="fa-solid fa-users"></i> Users</a><a href="messages.php"><i
+                        class="fa-solid fa-envelope"></i> Messages</a><a href="notifications.php"><i
+                        class="fa-solid fa-bell"></i> Notifications</a><a href="activity.php"><i
                         class="fa-solid fa-clock-rotate-left"></i> Activity logs</a></nav><a class="logout"
                 href="../logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</a>
         </aside>
@@ -232,123 +232,7 @@ $notifications = mysqli_query($con, "SELECT title, message, audience, created_at
                             </tbody>
                         </table>
                     </div>
-                </article>
-                <article class="panel" id="activity">
-                    <div class="panel-title">
-                        <div>
-                            <p class="eyebrow">AUDIT TRAIL</p>
-                            <h2>Recent activity</h2>
-                        </div>
-                    </div>
-                    <div class="timeline">
-                        <?php while ($activity = mysqli_fetch_assoc($activities)): ?>
-                        <div><span><i class="fa-solid fa-circle"></i></span>
-                            <p><b>
-                                    <?= e($activity['person'] ?: 'System') ?>
-                                </b>
-                                <?= e($activity['action_text']) ?><small>
-                                    <?= e(date('M j, g:i A', strtotime($activity['created_at']))) ?>
-                                </small>
-                            </p>
-                        </div>
-                        <?php endwhile; ?>
-                    </div>
-                </article>
-            </section>
-            <section class="grid lower">
-                <article class="panel" id="enrollments">
-                    <div class="panel-title">
-                        <div>
-                            <p class="eyebrow">LEARNING ACCESS</p>
-                            <h2>Enroll a student</h2>
-                        </div>
-                    </div>
-                    <form method="post" class="stack-form"><input type="hidden" name="csrf_token"
-                            value="<?= e($_SESSION['csrf_token']) ?>"><input type="hidden" name="action"
-                            value="enroll_student"><label>Student<select name="student_id" required>
-                                <option value="">Choose a student</option>
-                                <?php while ($student = mysqli_fetch_assoc($students)): ?>
-                                <option value="<?= (int)$student['id'] ?>">
-                                    <?= e($student['Firstname'].' '.$student['Lastname']) ?>
-                                </option>
-                                <?php endwhile; ?>
-                            </select></label><label>Active course<select name="course_id" required>
-                                <option value="">Choose a course</option>
-                                <?php while ($activeCourse = mysqli_fetch_assoc($activeCourses)): ?>
-                                <option value="<?= (int)$activeCourse['id'] ?>">
-                                    <?= e($activeCourse['course_code'].' — '.$activeCourse['title']) ?>
-                                </option>
-                                <?php endwhile; ?>
-                            </select></label><button class="primary" type="submit">Enroll student</button></form>
-                </article>
-                <article class="panel" id="notifications">
-                    <div class="panel-title">
-                        <div>
-                            <p class="eyebrow">COMMUNICATION</p>
-                            <h2>Publish update</h2>
-                        </div>
-                    </div>
-                    <form method="post" class="stack-form"><input type="hidden" name="csrf_token"
-                            value="<?= e($_SESSION['csrf_token']) ?>"><input type="hidden" name="action"
-                            value="post_notification"><label>Title<input name="title" maxlength="150" required
-                                placeholder="e.g. Quiz schedule update"></label><label>Message<textarea name="message"
-                                required
-                                placeholder="Write a useful, clear update..."></textarea></label><label>Audience<select
-                                name="audience">
-                                <option value="all">Everyone</option>
-                                <option value="students">Students only</option>
-                                <option value="teachers">Teachers only</option>
-                            </select></label><button class="primary" type="submit">Publish notification</button></form>
-                </article>
-                <article class="panel" id="people">
-                    <div class="panel-title">
-                        <div>
-                            <p class="eyebrow">USER MANAGEMENT</p>
-                            <h2>People and roles</h2>
-                        </div>
-                    </div>
-                    <div class="people-list">
-                        <?php while ($user = mysqli_fetch_assoc($users)): ?>
-                        <form method="post" class="person"><input type="hidden" name="csrf_token"
-                                value="<?= e($_SESSION['csrf_token']) ?>"><input type="hidden" name="action"
-                                value="update_role"><input type="hidden" name="user_id"
-                                value="<?= (int)$user['id'] ?>"><span class="avatar">
-                                <?= e(strtoupper(substr($user['Firstname'], 0, 1))) ?>
-                            </span><span><b>
-                                    <?= e($user['Firstname'].' '.$user['Lastname']) ?>
-                                </b><small>
-                                    <?= e($user['Email']) ?>
-                                </small></span><select name="usertype" onchange="this.form.submit()"
-                                <?=(int)$user['id']===$adminId ? 'disabled' : '' ?>><option value="0"
-                                    <?=(int)$user['UserType']===0 ? 'selected' : '' ?>>Student</option>
-                                <option value="2" <?=(int)$user['UserType']===2 ? 'selected' : '' ?>>Teacher</option>
-                                <option value="1" <?=(int)$user['UserType']===1 ? 'selected' : '' ?>>Admin</option>
-                            </select></form>
-                        <?php endwhile; ?>
-                    </div>
-                </article>
-            </section>
-            <section class="panel notices">
-                <div class="panel-title">
-                    <div>
-                        <p class="eyebrow">LATEST NOTICES</p>
-                        <h2>Notifications</h2>
-                    </div>
-                </div>
-                <?php while ($notification = mysqli_fetch_assoc($notifications)): ?>
-                <article><span class="notice-icon"><i class="fa-solid fa-bullhorn"></i></span>
-                    <div><b>
-                            <?= e($notification['title']) ?>
-                        </b>
-                        <p>
-                            <?= e($notification['message']) ?>
-                        </p><small>To
-                            <?= e($notification['audience']) ?> ·
-                            <?= e(date('M j', strtotime($notification['created_at']))) ?>
-                        </small>
-                    </div>
-                </article>
-                <?php endwhile; ?>
+</article>
             </section>
         </main>
     </div>

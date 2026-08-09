@@ -17,6 +17,31 @@ $portalLink = $isAdmin ? 'Admin-folder/Dashboard.php' : 'Form-folder/login.php';
 $courses = [];
 $announcements = [];
 
+// Contact form submission
+if (isset($_POST['contact_submit'])) {
+    $cName = trim($_POST['contact_name'] ?? '');
+    $cEmail = trim($_POST['contact_email'] ?? '');
+    $cSubject = trim($_POST['contact_subject'] ?? '');
+    $cMessage = trim($_POST['contact_message'] ?? '');
+    if ($cName !== '' && filter_var($cEmail, FILTER_VALIDATE_EMAIL) && $cMessage !== '') {
+        mysqli_query($con, "CREATE TABLE IF NOT EXISTS contact_messages (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(150) NOT NULL,
+            email VARCHAR(150) NOT NULL,
+            subject VARCHAR(200) NOT NULL DEFAULT '',
+            message TEXT NOT NULL,
+            is_read TINYINT(1) NOT NULL DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+        $statement = mysqli_prepare($con, 'INSERT INTO contact_messages (name, email, subject, message) VALUES (?, ?, ?, ?)');
+        mysqli_stmt_bind_param($statement, 'ssss', $cName, $cEmail, $cSubject, $cMessage);
+        mysqli_stmt_execute($statement);
+        $contactSent = true;
+    } else {
+        $contactError = 'Please fill in your name, a valid email, and a message.';
+    }
+}
+
 if (homeTableExists($con, 'courses')) {
     $courseResult = mysqli_query($con, "SELECT course_code, title, description FROM courses WHERE status = 'active' ORDER BY created_at DESC LIMIT 6");
     if ($courseResult) { $courses = mysqli_fetch_all($courseResult, MYSQLI_ASSOC); }
@@ -146,9 +171,21 @@ if (homeTableExists($con, 'notifications')) {
             <div class="experience-copy reveal"><p class="eyebrow blue-text">A better school experience</p><h2>Learning that feels <span>clear and inspiring.</span></h2><p>Our learning management system makes it easier to share knowledge, support every learner, and turn everyday schoolwork into meaningful progress.</p><ul><li><i class="fa-solid fa-circle-check"></i> One secure space for students and teachers</li><li><i class="fa-solid fa-circle-check"></i> Organized lessons, activities, and records</li><li><i class="fa-solid fa-circle-check"></i> Designed for accessible, engaging learning</li></ul><a class="text-link" href="Form-folder/login.php">Enter the learning portal <i class="fa-solid fa-arrow-right"></i></a></div>
         </section>
 
-        <section class="contact" id="contact">
-            <div class="contact-copy reveal"><p class="eyebrow"><i class="fa-solid fa-message"></i> Let’s connect</p><h2>Have questions? We’re here to help.</h2><p>Get in touch with the Jidanao LMS team for help accessing the platform or learning more about our school community.</p><a href="mailto:info@jidanaolms.edu.ph" class="btn btn-light">Contact us <i class="fa-solid fa-envelope"></i></a></div>
-            <div class="contact-details reveal"><a href="mailto:info@jidanaolms.edu.ph"><i class="fa-solid fa-envelope"></i><span><small>Email us</small>info@jidanaolms.edu.ph</span></a><a href="tel:+630000000000"><i class="fa-solid fa-phone"></i><span><small>Call us</small>School office</span></a></div>
+<section class="contact" id="contact">
+            <div class="contact-copy reveal"><p class="eyebrow"><i class="fa-solid fa-message"></i> Let’s connect</p><h2>Have questions? We’re here to help.</h2><p>Get in touch with the Jidanao LMS team for help accessing the platform or learning more about our school community.</p>
+            <?php if (!empty($contactSent)): ?><p class="contact-success"><i class="fa-solid fa-circle-check"></i> Thank you! Your message has been sent. We’ll get back to you soon.</p><?php endif; ?>
+            <?php if (!empty($contactError)): ?><p class="contact-error"><i class="fa-solid fa-circle-exclamation"></i> <?= homeE($contactError) ?></p><?php endif; ?>
+            <form method="post" class="contact-form">
+                <div class="contact-row">
+                    <input type="text" name="contact_name" placeholder="Your name" required value="<?= homeE($_POST['contact_name'] ?? '') ?>">
+                    <input type="email" name="contact_email" placeholder="Your email" required value="<?= homeE($_POST['contact_email'] ?? '') ?>">
+                </div>
+                <input type="text" name="contact_subject" placeholder="Subject (optional)" value="<?= homeE($_POST['contact_subject'] ?? '') ?>">
+                <textarea name="contact_message" placeholder="Write your message..." required><?= homeE($_POST['contact_message'] ?? '') ?></textarea>
+                <button type="submit" name="contact_submit" class="btn btn-light">Send message <i class="fa-solid fa-paper-plane"></i></button>
+            </form>
+            <div class="contact-details"><a href="mailto:info@jidanaolms.edu.ph"><i class="fa-solid fa-envelope"></i><span><small>Email us</small>info@jidanaolms.edu.ph</span></a><a href="tel:+630000000000"><i class="fa-solid fa-phone"></i><span><small>Call us</small>School office</span></a></div>
+            </div>
         </section>
     </main>
 

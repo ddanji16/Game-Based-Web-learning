@@ -1,0 +1,38 @@
+.inbox-stats {
+  grid-template-columns: repeat(2, 1fr);
+}
+.inbox-panel {
+  margin-bottom: 0;
+}
+.actions {
+  display: flex;
+  gap: 7px;
+}
+.danger {
+  background: #fff0f0;
+  color: #c64848;
+}
+.unread td {
+  background: #f7f9ff;
+}
+.unread td b {
+  font-weight: 800;
+}
+.msg-preview {
+  max-width: 320px;
+}
+.msg-preview {
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.no-records {
+  text-align: center;
+  color: var(--muted);
+  padding: 30px;
+}
+@media (max-width: 760px) {
+  .inbox-stats {
+    grid-template-columns: 1fr;
+  }
+}
