@@ -7,6 +7,9 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 require_once __DIR__ . '/database.php';
 
+// Ensure the users table has a grade_level column (Grades 1-6).
+mysqli_query($con, "ALTER TABLE users ADD COLUMN IF NOT EXISTS grade_level TINYINT NULL DEFAULT NULL");
+
 if (!isset($_SESSION['usertype']) || (int) $_SESSION['usertype'] !== 1) {
     header('Location: ../Form-folder/login.php');
     exit;
@@ -63,8 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $middlename = trim($_POST['middlename'] ?? '');
         $lastname = trim($_POST['lastname'] ?? '');
         $email = trim($_POST['email'] ?? '');
-        $usertype = (int) ($_POST['usertype'] ?? -1);
+$usertype = (int) ($_POST['usertype'] ?? -1);
         $password = $_POST['password'] ?? '';
+        $gradeLevel = isset($_POST['grade_level']) && $_POST['grade_level'] !== ''
+            ? (int) $_POST['grade_level']
+            : null;
+        if ($gradeLevel !== null && ($gradeLevel < 1 || $gradeLevel > 6)) {
+            $gradeLevel = null;
+        }
 
         if (
             $firstname === '' ||
@@ -90,20 +99,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Email,
                 createpassword,
                 confirmpassword,
-                UserType
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)'
+                UserType,
+                grade_level
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
         );
 
         mysqli_stmt_bind_param(
             $statement,
-            'ssssssi',
+            'ssssssii',
             $firstname,
             $middlename,
             $lastname,
             $email,
             $passwordHash,
             $passwordHash,
-            $usertype
+            $usertype,
+            $gradeLevel
         );
 
         if (!mysqli_stmt_execute($statement)) {
@@ -118,8 +129,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $firstname = trim($_POST['firstname'] ?? '');
         $middlename = trim($_POST['middlename'] ?? '');
         $lastname = trim($_POST['lastname'] ?? '');
-        $email = trim($_POST['email'] ?? '');
+$email = trim($_POST['email'] ?? '');
         $usertype = (int) ($_POST['usertype'] ?? -1);
+        $gradeLevel = isset($_POST['grade_level']) && $_POST['grade_level'] !== ''
+            ? (int) $_POST['grade_level']
+            : null;
+        if ($gradeLevel !== null && ($gradeLevel < 1 || $gradeLevel > 6)) {
+            $gradeLevel = null;
+        }
 
         if (
             $userId === $adminId ||
@@ -134,21 +151,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             );
         }
 
-        $statement = mysqli_prepare(
+$statement = mysqli_prepare(
             $con,
             'UPDATE users
-             SET Firstname = ?, Middlename = ?, Lastname = ?, Email = ?, UserType = ?
+             SET Firstname = ?, Middlename = ?, Lastname = ?, Email = ?, UserType = ?, grade_level = ?
              WHERE id = ?'
         );
 
         mysqli_stmt_bind_param(
             $statement,
-            'ssssii',
+            'ssssiii',
             $firstname,
             $middlename,
             $lastname,
             $email,
             $usertype,
+            $gradeLevel,
             $userId
         );
 
@@ -243,7 +261,7 @@ if (isset($_GET['edit'])) {
 
     $statement = mysqli_prepare(
         $con,
-        'SELECT id, Firstname, Middlename, Lastname, Email, UserType
+'SELECT id, Firstname, Middlename, Lastname, Email, UserType, grade_level
          FROM users
          WHERE id = ?'
     );
@@ -268,7 +286,7 @@ $users = mysqli_query(
 
 $students = mysqli_query(
     $con,
-    'SELECT id, Firstname, Lastname
+    'SELECT id, Firstname, Lastname, grade_level
      FROM users
      WHERE UserType = 0
      ORDER BY Firstname'
@@ -310,7 +328,7 @@ $progress = mysqli_query(
           <a href="Dashboard.php#courses"><i class="fa-solid fa-book-open"></i> Courses</a>
           <a class="active" href="users.php"><i class="fa-solid fa-users"></i> Users</a>
           <a href="messages.php"><i class="fa-solid fa-envelope"></i> Messages</a>
-          <a href="notifications.php"><i class="fa-solid fa-bell"></i> Notifications</a>
+          <a href="notifications.php"><i class="fa-solid fa-bell"></i> Announcement</a>
           <a href="activity.php"><i class="fa-solid fa-clock-rotate-left"></i> Activity logs</a>
         </nav>
         <a class="logout" href="../logout.php"
@@ -381,11 +399,21 @@ $progress = mysqli_query(
                   type="email"
                   name="email"
                   value="<?=h($edit['Email']??'')?>" /></label
-              ><label
+><label
                 >Role<select name="usertype">
-                  <option value="0">Student</option>
-                  <option value="2">Teacher</option>
-                  <option value="1">Administrator</option>
+                  <option value="0" <?= (int)($edit['UserType']??'')===0?'selected':'' ?>>Student</option>
+                  <option value="2" <?= (int)($edit['UserType']??'')===2?'selected':'' ?>>Teacher</option>
+                  <option value="1" <?= (int)($edit['UserType']??'')===1?'selected':'' ?>>Administrator</option>
+                </select></label
+              ><label
+                >Grade level<select name="grade_level">
+                  <option value="">Not set</option>
+                  <option value="1" <?= (int)($edit['grade_level']??'')===1?'selected':'' ?>>Grade 1</option>
+                  <option value="2" <?= (int)($edit['grade_level']??'')===2?'selected':'' ?>>Grade 2</option>
+                  <option value="3" <?= (int)($edit['grade_level']??'')===3?'selected':'' ?>>Grade 3</option>
+                  <option value="4" <?= (int)($edit['grade_level']??'')===4?'selected':'' ?>>Grade 4</option>
+                  <option value="5" <?= (int)($edit['grade_level']??'')===5?'selected':'' ?>>Grade 5</option>
+                  <option value="6" <?= (int)($edit['grade_level']??'')===6?'selected':'' ?>>Grade 6</option>
                 </select></label
               ><?php if(!$edit):?><label
                 >Password<input
@@ -411,11 +439,11 @@ $progress = mysqli_query(
                 name="csrf_token"
                 value="<?=h($_SESSION['csrf_token'])?>"
               /><input type="hidden" name="action" value="progress" /><label
-                >Student<select required name="student_id">
+>Student<select required name="student_id">
                   <option value="">Select student</option>
                   <?php while($s=mysqli_fetch_assoc($students)):?>
                   <option value="<?=$s['id']?>">
-                    <?=h($s['Firstname'].' '.$s['Lastname'])?>
+                    <?=h($s['Firstname'].' '.$s['Lastname'])?><?= $s['grade_level'] ? ' (Grade '.h($s['grade_level']).')' : '' ?>
                   </option>
                   <?php endwhile;?>
                 </select></label
@@ -463,9 +491,10 @@ $progress = mysqli_query(
           <div class="table-wrap">
             <table>
               <thead>
-                <tr>
+<tr>
                   <th>User</th>
                   <th>Role</th>
+                  <th>Grade</th>
                   <th>Average progress</th>
                   <th></th>
                 </tr>
@@ -477,8 +506,11 @@ $progress = mysqli_query(
                     <b><?=h($u['Firstname'].' '.$u['Lastname'])?></b
                     ><span><?=h($u['Email'])?></span>
                   </td>
-                  <td>
+<td>
                     <?=['Student','Administrator','Teacher'][(int)$u['UserType']]?>
+                  </td>
+                  <td>
+                    <?= $u['grade_level'] ? 'Grade '.h($u['grade_level']) : '—' ?>
                   </td>
                   <td>
                     <?php if((int)$u['UserType']===0):?>

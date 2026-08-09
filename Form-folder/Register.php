@@ -5,6 +5,9 @@ include '../Admin-folder/database.php';
 
 
 
+// Ensure the users table has a grade_level column (Grades 1-6).
+mysqli_query($con, "ALTER TABLE users ADD COLUMN IF NOT EXISTS grade_level TINYINT NULL DEFAULT NULL");
+
 if(isset($_POST["register"])){
 
  if($_POST["createpassword"] === $_POST["confirmpassword"]){
@@ -17,20 +20,29 @@ if(isset($_POST["register"])){
     $passwordHash = password_hash($_POST["createpassword"], PASSWORD_DEFAULT);
     $usertype = $_POST["usertype"];
 
+    // Capture the selected grade level (1-6). Only meaningful for students.
+    $gradeLevel = isset($_POST["grade_level"]) && $_POST["grade_level"] !== ""
+        ? (int) $_POST["grade_level"]
+        : null;
+    if ($gradeLevel !== null && ($gradeLevel < 1 || $gradeLevel > 6)) {
+        $gradeLevel = null;
+    }
+
 
     $_SESSION['name']= $firstname;  
     $_SESSION['middlename']= $middlename;
     $_SESSION['lastname']= $lastname;
     $_SESSION['email']= $email;
     $_SESSION['usertype']= $usertype;
+    $_SESSION['grade_level']= $gradeLevel;
 
     
 
-    $query = "INSERT INTO users (firstname, middlename, lastname, Email, createpassword, confirmpassword, usertype) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO users (firstname, middlename, lastname, Email, createpassword, confirmpassword, usertype, grade_level) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $statement = mysqli_prepare($con, $query);
 
     // Keep the existing confirmation column hashed too; it contains no plaintext password.
-    mysqli_stmt_bind_param($statement, "ssssssi", $firstname, $middlename, $lastname, $email, $passwordHash, $passwordHash, $usertype);
+    mysqli_stmt_bind_param($statement, "ssssssii", $firstname, $middlename, $lastname, $email, $passwordHash, $passwordHash, $usertype, $gradeLevel);
     $quary_run = mysqli_stmt_execute($statement);
 
         if($quary_run){
@@ -117,7 +129,7 @@ else{
             <input type="password" id="confirmPassword" name="confirmpassword" placeholder="Confirm Password" required />
           </div>
 
-          <div class="input-box">
+<div class="input-box">
 
             <select name="usertype" required>
               <option value="" disabled selected>Select User Type</option>
@@ -126,9 +138,22 @@ else{
               <option value="1">Administrator</option>
               -->
 
-              <option value="2">Teacher</option>
+              <option value="2">User</option>
 
               <option value="0">Student</option>
+            </select>
+          </div>
+
+          <div class="input-box">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <select name="grade_level">
+              <option value="" selected>Select Grade Level</option>
+              <option value="1">Grade 1</option>
+              <option value="2">Grade 2</option>
+              <option value="3">Grade 3</option>
+              <option value="4">Grade 4</option>
+              <option value="5">Grade 5</option>
+              <option value="6">Grade 6</option>
             </select>
           </div>
 

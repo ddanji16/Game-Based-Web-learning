@@ -10,6 +10,9 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['usertype']) || (int) $_SES
     exit;
 }
 
+// Ensure the users table has a grade_level column (Grades 1-6).
+mysqli_query($con, "ALTER TABLE users ADD COLUMN IF NOT EXISTS grade_level TINYINT NULL DEFAULT NULL");
+
 function accountE($value)
 {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -31,7 +34,7 @@ $studentId = (int) $_SESSION['user_id'];
 
 $profileStatement = mysqli_prepare(
     $con,
-    'SELECT Firstname, Middlename, Lastname, Email FROM users WHERE id = ? LIMIT 1'
+    'SELECT Firstname, Middlename, Lastname, Email, grade_level FROM users WHERE id = ? LIMIT 1'
 );
 mysqli_stmt_bind_param($profileStatement, 'i', $studentId);
 mysqli_stmt_execute($profileStatement);
@@ -106,8 +109,8 @@ $initial = strtoupper(substr($profile['Firstname'], 0, 1));
             <article><i class="fa-solid fa-circle-check green"></i><div><small>Completed activities</small><strong><?= $completedCount ?></strong></div></article>
             <article><i class="fa-solid fa-book-open orange"></i><div><small>My courses</small><strong><?= count($courses) ?></strong></div></article>
         </section>
-        <section class="content-grid">
-            <article class="card"><div class="heading"><div><p>MY INFORMATION</p><h2>Profile details</h2></div><i class="fa-solid fa-id-card"></i></div><dl><div><dt>Full name</dt><dd><?= accountE(trim($profile['Firstname'].' '.$profile['Middlename'].' '.$profile['Lastname'])) ?></dd></div><div><dt>Email address</dt><dd><?= accountE($profile['Email']) ?></dd></div><div><dt>Role</dt><dd>Student</dd></div></dl></article>
+<section class="content-grid">
+<article class="card"><div class="heading"><div><p>MY INFORMATION</p><h2>Profile details</h2></div><i class="fa-solid fa-id-card"></i></div><dl><div><dt>Full name</dt><dd><?= accountE(trim($profile['Firstname'].' '.$profile['Middlename'].' '.$profile['Lastname'])) ?></dd></div><div><dt>Email address</dt><dd><?= accountE($profile['Email']) ?></dd></div><div><dt>Role</dt><dd>Student</dd></div><div><dt>Grade level</dt><dd><?= $profile['grade_level'] ? 'Grade '.accountE($profile['grade_level']) : 'Not set' ?></dd></div></dl></article>
             <article class="card"><div class="heading"><div><p>MY LEARNING</p><h2>Progress overview</h2></div><i class="fa-solid fa-medal"></i></div><div class="circle" style="--progress: <?= $averageProgress ?>"><span><?= $averageProgress ?>%<small>overall</small></span></div><p class="center-text">Keep going! Every activity helps you grow.</p></article>
         </section>
         <section class="card"><div class="heading"><div><p>ENROLLED COURSES</p><h2>My courses</h2></div></div><div class="course-grid"><?php if ($courses): foreach ($courses as $course): ?><article><span><i class="fa-solid fa-book"></i></span><p><?= accountE($course['course_code']) ?></p><h3><?= accountE($course['title']) ?></h3><small><?= accountE($course['description'] ?: 'Your learning space is ready.') ?></small></article><?php endforeach; else: ?><div class="empty"><i class="fa-solid fa-book-open"></i><h3>No courses yet</h3><p>Your teacher or administrator will enroll you in a course soon.</p></div><?php endif; ?></div></section>

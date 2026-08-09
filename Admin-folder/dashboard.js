@@ -26,3 +26,13 @@ document
   .forEach((link) =>
     link.addEventListener("click", () => sidebar.classList.remove("open")),
   );
+
+// Animate grade progress bars on page load
+requestAnimationFrame(() => {
+  document.querySelectorAll(".grade-fill").forEach((fill) => {
+    const width = fill.getAttribute("data-width") || "0%";
+    setTimeout(() => {
+      fill.style.width = width;
+    }, 120);
+  });
+});

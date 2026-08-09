@@ -2,6 +2,9 @@
 if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
 require_once __DIR__ . '/database.php';
 
+// Ensure the users table has a grade_level column (Grades 1-6).
+mysqli_query($con, "ALTER TABLE users ADD COLUMN IF NOT EXISTS grade_level TINYINT NULL DEFAULT NULL");
+
 if (!isset($_SESSION['usertype']) || (int) $_SESSION['usertype'] !== 1) {
     header('Location: ../Form-folder/login.php');
     exit;
@@ -114,7 +117,8 @@ $stats = mysqli_fetch_assoc(mysqli_query($con, "SELECT (SELECT COUNT(*) FROM use
 $courses = mysqli_query($con, "SELECT c.*, CONCAT_WS(' ', u.Firstname, u.Lastname) teacher, COUNT(e.id) enrollment_count FROM courses c LEFT JOIN users u ON u.id = c.teacher_id LEFT JOIN enrollments e ON e.course_id = c.id GROUP BY c.id ORDER BY c.created_at DESC");
 $users = mysqli_query($con, "SELECT id, Firstname, Lastname, Email, UserType FROM users ORDER BY Firstname, Lastname");
 $teachers = mysqli_query($con, "SELECT id, Firstname, Lastname FROM users WHERE UserType = 2 ORDER BY Firstname, Lastname");
-$students = mysqli_query($con, "SELECT id, Firstname, Lastname FROM users WHERE UserType = 0 ORDER BY Firstname, Lastname");
+$students = mysqli_query($con, "SELECT id, Firstname, Lastname, grade_level FROM users WHERE UserType = 0 ORDER BY Firstname, Lastname");
+$gradeBreakdown = mysqli_query($con, "SELECT grade_level, COUNT(*) AS count FROM users WHERE UserType = 0 AND grade_level IS NOT NULL GROUP BY grade_level ORDER BY grade_level");
 $activeCourses = mysqli_query($con, "SELECT id, course_code, title FROM courses WHERE status = 'active' ORDER BY title");
 $activities = mysqli_query($con, "SELECT a.action_text, a.created_at, CONCAT_WS(' ', u.Firstname, u.Lastname) person FROM activity_logs a LEFT JOIN users u ON u.id = a.user_id ORDER BY a.created_at DESC LIMIT 6");
 $notifications = mysqli_query($con, "SELECT title, message, audience, created_at FROM notifications ORDER BY created_at DESC LIMIT 4");
@@ -181,6 +185,51 @@ $notifications = mysqli_query($con, "SELECT title, message, audience, created_at
                             <?= (int)$stats['enrollments'] ?>
                         </strong><em>Course registrations</em></div>
                 </article>
+</section>
+<section class="panel grade-panel">
+                <div class="panel-title">
+                    <div>
+                        <p class="eyebrow">ENROLLMENT BY LEVEL</p>
+                        <h2>Students per grade</h2>
+                        <p class="subtle">Distribution of registered learners across all grade levels.</p>
+                    </div>
+                    <div class="grade-total">
+                        <span class="stat-icon purple"><i class="fa-solid fa-user-graduate"></i></span>
+                        <div><small>Total students</small><strong><?= (int)$stats['students'] ?></strong></div>
+                    </div>
+                </div>
+                <?php
+                $gradeCounts = array_fill(1, 6, 0);
+                while ($g = mysqli_fetch_assoc($gradeBreakdown)) {
+                    $gradeCounts[(int) $g['grade_level']] = (int) $g['count'];
+                }
+                $maxGrade = max($gradeCounts) ?: 1;
+                $accentClass = ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'];
+                ?>
+                <div class="grade-grid">
+                    <?php for ($i = 1; $i <= 6; $i++):
+                        $count = $gradeCounts[$i];
+                        $pct = $maxGrade ? round(($count / $maxGrade) * 100) : 0;
+                    ?>
+                    <div class="grade-card <?= $accentClass[$i - 1] ?>">
+                        <div class="grade-card-top">
+                            <span class="grade-num">Grade <?= $i ?></span>
+                            <span class="grade-count"><?= $count ?> <small>students</small></span>
+                        </div>
+                        <div class="grade-progress">
+                            <i class="grade-fill" data-width="<?= $pct ?>%"></i>
+                            <span class="grade-pct"><?= $pct ?>%</span>
+                        </div>
+                        <div class="grade-card-foot">
+                            <span class="grade-dot"></span>
+                            <em><?= $count ? round(($count / $maxGrade) * 100) : 0 ?>% of largest level</em>
+                        </div>
+                    </div>
+                    <?php endfor; ?>
+                </div>
+                <div class="grade-legend">
+                    <span><i class="fa-solid fa-chart-simple"></i> Showing share of each grade relative to the most populated level</span>
+                </div>
             </section>
             <section class="grid">
                 <article class="panel wide" id="courses">

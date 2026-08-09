@@ -80,7 +80,7 @@ $notifications = mysqli_query($con, "SELECT id, title, message, audience, create
                 <a href="Dashboard.php#courses"><i class="fa-solid fa-book-open"></i> Courses</a>
                 <a href="users.php"><i class="fa-solid fa-users"></i> Users</a>
                 <a href="messages.php"><i class="fa-solid fa-envelope"></i> Messages</a>
-                <a class="active" href="notifications.php"><i class="fa-solid fa-bell"></i> Notifications</a>
+                <a class="active" href="notifications.php"><i class="fa-solid fa-bell"></i> Announcement</a>
                 <a href="activity.php"><i class="fa-solid fa-clock-rotate-left"></i> Activity logs</a>
             </nav>
             <a class="logout" href="../logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</a>

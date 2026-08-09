@@ -70,7 +70,7 @@ $activities = mysqli_query($con, "SELECT a.id, a.action_text, a.created_at, CONC
                 <a href="Dashboard.php#courses"><i class="fa-solid fa-book-open"></i> Courses</a>
                 <a href="users.php"><i class="fa-solid fa-users"></i> Users</a>
                 <a href="messages.php"><i class="fa-solid fa-envelope"></i> Messages</a>
-                <a href="notifications.php"><i class="fa-solid fa-bell"></i> Notifications</a>
+                <a href="notifications.php"><i class="fa-solid fa-bell"></i> Announcement</a>
                 <a class="active" href="activity.php"><i class="fa-solid fa-clock-rotate-left"></i> Activity logs</a>
             </nav>
             <a class="logout" href="../logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</a>

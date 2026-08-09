@@ -31,11 +31,14 @@ if(isset($_POST["login"])){
 
     if($validPassword){
 
-        $_SESSION["email"] = $row["Email"];
+$_SESSION["email"] = $row["Email"];
         $userRole = (int) $row["UserType"];
         $_SESSION["usertype"] = $userRole;
         $_SESSION["firstname"] = $row["firstname"];
         $_SESSION["user_id"] = $row["id"];
+$_SESSION["grade_level"] = isset($row["grade_level"]) && $row["grade_level"] !== null
+            ? (int) $row["grade_level"]
+            : null;
 
         if($userRole === 0){
             header("location: ../index.php");

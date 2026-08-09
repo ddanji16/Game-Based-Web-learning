@@ -106,14 +106,16 @@ if (homeTableExists($con, 'notifications')) {
                 <p class="hero-copy">Jidanao LMS brings lessons, assignments, progress, and school communication together in one simple learning space.</p>
                 <div class="hero-actions">
                     <a class="btn btn-primary" href="<?= homeE($portalLink) ?>"><?= $isAdmin ? 'Open dashboard' : ($isLoggedIn ? 'Explore modules' : 'Get started') ?> <i class="fa-solid fa-arrow-right"></i></a>
-                    <a class="btn btn-light" href="#learning-modules"><i class="fa-solid fa-book-open"></i> Explore modules</a>
-                </div>
+                    <a class="btn btn-light" href="#learning-modules"><i class="fa-solid fa-book-open"></i> Explore Activities</a>
+                </div>  
                 <div class="hero-proof">
                     <span><i class="fa-solid fa-check"></i> Easy to use</span>
                     <span><i class="fa-solid fa-check"></i> Built for school</span>
                     <span><i class="fa-solid fa-check"></i> Always connected</span>
                 </div>
             </div>
+
+            
 
             <div class="hero-visual reveal" aria-hidden="true">
                 <div class="dashboard-card">
@@ -125,6 +127,16 @@ if (homeTableExists($con, 'notifications')) {
                 </div>
                 <div class="floating-card students"><span><i class="fa-solid fa-users"></i></span><div><b>Connected</b><small>Learning community</small></div></div>
                 <div class="floating-card trophy"><i class="fa-solid fa-trophy"></i><div><b>Great job!</b><small>New achievement</small></div></div>
+            </div>
+        </section>
+
+          <section class="section features" id="features">
+            <div class="section-heading reveal"><p class="eyebrow blue-text">Everything in one platform</p><h2>Built for every part of the <span>learning journey.</span></h2><p>Simple tools that help students stay engaged, teachers stay organized, and families stay informed.</p></div>
+            <div class="feature-grid">
+                <article class="feature-card reveal"><span class="feature-icon indigo"><i class="fa-solid fa-book-open"></i></span><h3>Learning Modules</h3><p>Access organized lessons, reading materials, videos, and interactive activities at any time.</p><a href="Form-folder/login.php">Explore lessons <i class="fa-solid fa-arrow-right"></i></a></article>
+                <article class="feature-card reveal"><span class="feature-icon teal"><i class="fa-solid fa-chart-line"></i></span><h3>Progress Tracking</h3><p>Follow learner performance and growth with clear, easy-to-understand progress records.</p><a href="Form-folder/login.php">View progress <i class="fa-solid fa-arrow-right"></i></a></article>
+                <article class="feature-card reveal"><span class="feature-icon orange"><i class="fa-solid fa-clipboard-list"></i></span><h3>Smart Assignments</h3><p>Keep tasks, submissions, and deadlines in one place so nothing gets missed.</p><a href="Form-folder/login.php">See assignments <i class="fa-solid fa-arrow-right"></i></a></article>
+                <article class="feature-card reveal"><span class="feature-icon pink"><i class="fa-solid fa-award"></i></span><h3>Achievements</h3><p>Celebrate effort and learning milestones with certificates and meaningful recognition.</p><a href="Form-folder/login.php">Discover achievements <i class="fa-solid fa-arrow-right"></i></a></article>
             </div>
         </section>
 
@@ -156,20 +168,15 @@ if (homeTableExists($con, 'notifications')) {
 
         <section class="section announcements" id="announcements"><div class="section-heading reveal"><p class="eyebrow blue-text">STAY INFORMED</p><h2>School <span>announcements.</span></h2><p>Important updates shared by your school team.</p></div><div class="announcement-list"><?php if ($announcements): foreach ($announcements as $announcement): ?><article class="announcement reveal"><span><i class="fa-solid fa-bullhorn"></i></span><div><p class="announcement-audience">For <?= homeE($announcement['audience']) ?></p><h3><?= homeE($announcement['title']) ?></h3><p><?= homeE($announcement['message']) ?></p><small><?= homeE(date('F j, Y', strtotime($announcement['created_at']))) ?></small></div></article><?php endforeach; else: ?><article class="empty-state"><i class="fa-solid fa-bell"></i><h3>No announcements yet</h3><p>School updates will be shown here as soon as they are published.</p></article><?php endif; ?></div></section>
 
-        <section class="section features" id="features">
-            <div class="section-heading reveal"><p class="eyebrow blue-text">Everything in one platform</p><h2>Built for every part of the <span>learning journey.</span></h2><p>Simple tools that help students stay engaged, teachers stay organized, and families stay informed.</p></div>
-            <div class="feature-grid">
-                <article class="feature-card reveal"><span class="feature-icon indigo"><i class="fa-solid fa-book-open"></i></span><h3>Learning Modules</h3><p>Access organized lessons, reading materials, videos, and interactive activities at any time.</p><a href="Form-folder/login.php">Explore lessons <i class="fa-solid fa-arrow-right"></i></a></article>
-                <article class="feature-card reveal"><span class="feature-icon teal"><i class="fa-solid fa-chart-line"></i></span><h3>Progress Tracking</h3><p>Follow learner performance and growth with clear, easy-to-understand progress records.</p><a href="Form-folder/login.php">View progress <i class="fa-solid fa-arrow-right"></i></a></article>
-                <article class="feature-card reveal"><span class="feature-icon orange"><i class="fa-solid fa-clipboard-list"></i></span><h3>Smart Assignments</h3><p>Keep tasks, submissions, and deadlines in one place so nothing gets missed.</p><a href="Form-folder/login.php">See assignments <i class="fa-solid fa-arrow-right"></i></a></article>
-                <article class="feature-card reveal"><span class="feature-icon pink"><i class="fa-solid fa-award"></i></span><h3>Achievements</h3><p>Celebrate effort and learning milestones with certificates and meaningful recognition.</p><a href="Form-folder/login.php">Discover achievements <i class="fa-solid fa-arrow-right"></i></a></article>
-            </div>
-        </section>
+            
+      
 
         <section class="section experience" id="about">
             <div class="experience-visual reveal"><div class="hex hex-main"><i class="fa-solid fa-graduation-cap"></i><b>Jidanao<br>LMS</b></div><div class="hex hex-a"><i class="fa-solid fa-book"></i></div><div class="hex hex-b"><i class="fa-solid fa-chart-column"></i></div><div class="hex hex-c"><i class="fa-solid fa-users"></i></div><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div></div>
             <div class="experience-copy reveal"><p class="eyebrow blue-text">A better school experience</p><h2>Learning that feels <span>clear and inspiring.</span></h2><p>Our learning management system makes it easier to share knowledge, support every learner, and turn everyday schoolwork into meaningful progress.</p><ul><li><i class="fa-solid fa-circle-check"></i> One secure space for students and teachers</li><li><i class="fa-solid fa-circle-check"></i> Organized lessons, activities, and records</li><li><i class="fa-solid fa-circle-check"></i> Designed for accessible, engaging learning</li></ul><a class="text-link" href="Form-folder/login.php">Enter the learning portal <i class="fa-solid fa-arrow-right"></i></a></div>
         </section>
+
+
 
 <section class="contact" id="contact">
             <div class="contact-copy reveal"><p class="eyebrow"><i class="fa-solid fa-message"></i> Let’s connect</p><h2>Have questions? We’re here to help.</h2><p>Get in touch with the Jidanao LMS team for help accessing the platform or learning more about our school community.</p>
