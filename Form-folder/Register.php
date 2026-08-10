@@ -134,9 +134,9 @@ else{
             <select name="usertype" required>
               <option value="" disabled selected>Select User Type</option>
 
-              <!--
+              
               <option value="1">Administrator</option>
-              -->
+              
 
               <option value="2">User</option>
 
@@ -145,9 +145,9 @@ else{
           </div>
 
           <div class="input-box">
-            <i class="fa-solid fa-graduation-cap"></i>
+         
             <select name="grade_level">
-              <option value="" selected>Select Grade Level</option>
+              <option value="" selected> Select Grade Level</option>
               <option value="1">Grade 1</option>
               <option value="2">Grade 2</option>
               <option value="3">Grade 3</option>
