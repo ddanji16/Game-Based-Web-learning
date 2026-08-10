@@ -82,6 +82,22 @@ if (accountTableExists($con, 'student_progress')) {
     }
 }
 
+$certificates = [];
+if (accountTableExists($con, 'certificates')) {
+    $certificateStatement = mysqli_prepare(
+        $con,
+        'SELECT c.id, c.certificate_type, c.cert_code, c.course_id, co.title AS course_title
+         FROM certificates c
+         LEFT JOIN courses co ON co.id = c.course_id
+         WHERE c.student_id = ?
+         ORDER BY c.id DESC'
+    );
+    mysqli_stmt_bind_param($certificateStatement, 'i', $studentId);
+    mysqli_stmt_execute($certificateStatement);
+    $certificates = mysqli_fetch_all(mysqli_stmt_get_result($certificateStatement), MYSQLI_ASSOC);
+}
+
+$fullName = trim($profile['Firstname'] . ' ' . $profile['Middlename'] . ' ' . $profile['Lastname']);
 $initial = strtoupper(substr($profile['Firstname'], 0, 1));
 ?>
 <!doctype html>
@@ -115,6 +131,46 @@ $initial = strtoupper(substr($profile['Firstname'], 0, 1));
         </section>
         <section class="card"><div class="heading"><div><p>ENROLLED COURSES</p><h2>My courses</h2></div></div><div class="course-grid"><?php if ($courses): foreach ($courses as $course): ?><article><span><i class="fa-solid fa-book"></i></span><p><?= accountE($course['course_code']) ?></p><h3><?= accountE($course['title']) ?></h3><small><?= accountE($course['description'] ?: 'Your learning space is ready.') ?></small></article><?php endforeach; else: ?><div class="empty"><i class="fa-solid fa-book-open"></i><h3>No courses yet</h3><p>Your teacher or administrator will enroll you in a course soon.</p></div><?php endif; ?></div></section>
         <section class="card"><div class="heading"><div><p>ACTIVITY RECORDS</p><h2>My progress</h2></div></div><div class="table-wrap"><table><thead><tr><th>Activity</th><th>Progress</th><th>Score</th><th>Status</th><th>Updated</th></tr></thead><tbody><?php if ($progressRecords): foreach ($progressRecords as $record): ?><tr><td><b><?= accountE($record['activity_title']) ?></b></td><td><div class="progress"><i style="width: <?= (int)$record['progress_percentage'] ?>%"></i></div><?= (int)$record['progress_percentage'] ?>%</td><td><?= $record['score'] !== null ? accountE($record['score']).'%' : '—' ?></td><td><span class="status <?= accountE($record['status']) ?>"><?= accountE(ucwords(str_replace('_', ' ', $record['status']))) ?></span></td><td><?= accountE(date('M j, Y', strtotime($record['updated_at']))) ?></td></tr><?php endforeach; else: ?><tr><td colspan="5" class="no-records">Your teacher has not posted a progress record yet.</td></tr><?php endif; ?></tbody></table></div></section>
+        <section class="card">
+            <div class="heading">
+                <div><p>MY CERTIFICATES</p><h2>Available downloads</h2></div>
+                <i class="fa-solid fa-award"></i>
+            </div>
+            <?php if ($certificates): foreach ($certificates as $certificate): ?>
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #e5e7eb;">
+                    <div>
+                        <strong><?= accountE($certificate['certificate_type']) ?></strong>
+                        <p style="margin:4px 0; color:#4b5563;"><?= accountE($certificate['course_title'] ?: 'Course certificate') ?></p>
+                        <small>Code: <?= accountE($certificate['cert_code']) ?></small>
+                    </div>
+                    <button type="button" style="padding:8px 12px; background:#2563eb; color:#fff; border:none; border-radius:8px; cursor:pointer;" onclick="downloadCertificate(<?= json_encode($fullName, JSON_HEX_SINGLE_QUOTES | JSON_HEX_DOUBLE_QUOTES) ?>, <?= json_encode($certificate['course_title'] ?: 'Course', JSON_HEX_SINGLE_QUOTES | JSON_HEX_DOUBLE_QUOTES) ?>, <?= json_encode($certificate['certificate_type'], JSON_HEX_SINGLE_QUOTES | JSON_HEX_DOUBLE_QUOTES) ?>)">Download Certificate</button>
+                </div>
+            <?php endforeach; else: ?>
+                <div class="empty"><i class="fa-solid fa-award"></i><h3>No certificates yet</h3><p>Your achievements will appear here once your teacher or administrator issues one.</p></div>
+            <?php endif; ?>
+        </section>
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.7/jspdf.umd.min.js"></script>
+    <script>
+        function downloadCertificate(studentName, courseName, certType) {
+            const PdfLibrary = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : window.jsPDF;
+            if (!PdfLibrary) {
+                alert('PDF library is not available right now.');
+                return;
+            }
+
+            const doc = new PdfLibrary({ orientation: 'landscape' });
+            doc.setFontSize(34);
+            doc.text('CERTIFICATE OF COMPLETION', 35, 45);
+            doc.setFontSize(18);
+            doc.text('This is to certify that', 105, 80, null, null, 'center');
+            doc.setFontSize(24);
+            doc.text(studentName || 'Student Name', 105, 100, null, null, 'center');
+            doc.setFontSize(16);
+            doc.text(`has successfully completed the ${certType || 'achievement'} of`, 105, 125, null, null, 'center');
+            doc.text(courseName || 'Course Name', 105, 140, null, null, 'center');
+            doc.save(`${(studentName || 'student').replace(/\s+/g, '_')}_Certificate.pdf`);
+        }
+    </script>
 </body>
 </html>

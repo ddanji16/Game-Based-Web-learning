@@ -138,7 +138,7 @@ else{
               <option value="1">Administrator</option>
               
 
-              <option value="2">User</option>
+              <option value="2">Guest</option>
 
               <option value="0">Student</option>
             </select>

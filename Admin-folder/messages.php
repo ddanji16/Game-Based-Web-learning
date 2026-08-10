@@ -77,6 +77,7 @@ $messages = mysqli_query($con, "SELECT id, name, email, subject, message, is_rea
                 <a href="users.php"><i class="fa-solid fa-users"></i> Users</a>
                 <a class="active" href="messages.php"><i class="fa-solid fa-envelope"></i> Messages</a>
 <a href="notifications.php"><i class="fa-solid fa-bell"></i> Announcement</a>
+ <a href="achievements.php"><i class="fa-solid fa-trophy"></i> Achievements</a>
                 <a href="activity.php"><i class="fa-solid fa-clock-rotate-left"></i> Activity logs</a>
             </nav>
             <a class="logout" href="../logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</a>
