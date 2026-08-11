@@ -318,6 +318,154 @@ td {
 .table-wrap {
   overflow: auto;
 }
+.cert-note {
+  margin: -6px 0 14px;
+  color: var(--muted);
+}
+.download-banner {
+  display: grid;
+  gap: 16px;
+  gap: 16px;
+  padding: 18px;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #eff5ff, #edfdfb);
+  border: 1px solid #d7e4ff;
+}
+.download-banner__actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: 100%;
+}
+.download-banner p {
+  margin: 0 0 4px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #2563eb;
+}
+.download-banner h3 {
+  margin: 0;
+  font-size: 19px;
+}
+.download-banner span {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+}
+.cert-actions--banner {
+  justify-content: flex-end;
+}
+.cert-card {
+  margin-bottom: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #f9fbff;
+  box-shadow: 0 4px 14px rgba(32, 54, 91, 0.04);
+}
+.cert-card__body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cert-card__title {
+  min-width: 240px;
+}
+.cert-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 4px;
+}
+.download-btn {
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+  min-width: 160px;
+  padding: 12px 16px;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.download-btn--hero {
+  min-width: 0;
+  padding: 16px 18px;
+  width: 100%;
+}
+.download-btn--pdf {
+  background: #2563eb;
+}
+.download-btn--image {
+  background: #0f9bb5;
+  box-shadow: 0 8px 18px rgba(15, 155, 181, 0.18);
+}
+.download-btn--jpg {
+  background: #159a75;
+  box-shadow: 0 8px 18px rgba(21, 154, 117, 0.18);
+}
+.download-btn:hover {
+  filter: brightness(0.98);
+  transform: translateY(-1px);
+}
+.download-btn--light {
+  background: #edf2fb;
+  color: #17213a;
+  box-shadow: 0 8px 18px rgba(23, 33, 58, 0.08);
+}
+.download-btn--light:hover {
+  background: #e3ebf8;
+}
+.cert-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.78);
+}
+.cert-modal.open {
+  display: flex;
+}
+.cert-modal__overlay {
+  position: absolute;
+  inset: 0;
+}
+.cert-modal__dialog {
+  position: relative;
+  width: min(100%, 1160px);
+  display: grid;
+  gap: 14px;
+}
+.cert-modal__card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.42);
+}
+.cert-modal__card canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+.cert-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 @media (max-width: 700px) {
   main {
     padding: 24px 16px;
@@ -332,6 +480,28 @@ td {
   .content-grid,
   .course-grid {
     grid-template-columns: 1fr;
+  }
+  .download-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .download-banner__actions {
+    grid-template-columns: 1fr;
+  }
+  .cert-actions {
+    width: 100%;
+  }
+  .download-btn {
+    width: 100%;
+  }
+  .cert-modal {
+    padding: 14px;
+  }
+  .cert-modal__footer {
+    justify-content: stretch;
+  }
+  .cert-modal__footer .download-btn {
+    width: 100%;
   }
   .topbar {
     padding: 0 16px;

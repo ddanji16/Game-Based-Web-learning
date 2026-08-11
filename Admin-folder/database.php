@@ -53,6 +53,12 @@ $tables = [
         student_id INT NOT NULL,
         course_id INT NULL,
         certificate_type VARCHAR(100) NOT NULL,
+        course_name VARCHAR(255) NULL,
+        certificate_title VARCHAR(255) NULL,
+        certificate_message TEXT NULL,
+        certificate_period VARCHAR(100) NULL,
+        issuer_name VARCHAR(100) NOT NULL DEFAULT 'Jidanao LMS Admin',
+        issue_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         cert_code VARCHAR(50) NOT NULL UNIQUE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
@@ -77,5 +83,11 @@ mysqli_query($con, "ALTER TABLE student_progress ADD COLUMN IF NOT EXISTS score 
 mysqli_query($con, "ALTER TABLE student_progress ADD COLUMN IF NOT EXISTS status ENUM('not_started', 'in_progress', 'completed') NOT NULL DEFAULT 'not_started'");
 mysqli_query($con, "ALTER TABLE student_progress ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
 mysqli_query($con, "ALTER TABLE certificates ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
+mysqli_query($con, "ALTER TABLE certificates ADD COLUMN IF NOT EXISTS course_name VARCHAR(255) NULL");
+mysqli_query($con, "ALTER TABLE certificates ADD COLUMN IF NOT EXISTS certificate_title VARCHAR(255) NULL");
+mysqli_query($con, "ALTER TABLE certificates ADD COLUMN IF NOT EXISTS certificate_message TEXT NULL");
+mysqli_query($con, "ALTER TABLE certificates ADD COLUMN IF NOT EXISTS certificate_period VARCHAR(100) NULL");
+mysqli_query($con, "ALTER TABLE certificates ADD COLUMN IF NOT EXISTS issuer_name VARCHAR(100) NOT NULL DEFAULT 'Jidanao LMS Admin'");
+mysqli_query($con, "ALTER TABLE certificates ADD COLUMN IF NOT EXISTS issue_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
 mysqli_query($con, "ALTER TABLE notifications ADD COLUMN IF NOT EXISTS recipient_id INT NULL");
 ?>
