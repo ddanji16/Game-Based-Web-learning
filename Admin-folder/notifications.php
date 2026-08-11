@@ -77,7 +77,7 @@ $notifications = mysqli_query($con, "SELECT id, title, message, audience, create
             <a class="brand" href="Dashboard.php"><span class="brand-mark">J</span><span>Jidanao <b>LMS</b></span></a>
             <nav>
                 <a href="Dashboard.php"><i class="fa-solid fa-grid-2"></i> Overview</a>
-                <a href="Dashboard.php#courses"><i class="fa-solid fa-book-open"></i> Courses</a>
+                <a href="courses.php"><i class="fa-solid fa-book-open"></i> Courses</a>
                 <a href="users.php"><i class="fa-solid fa-users"></i> Users</a>
                 <a href="messages.php"><i class="fa-solid fa-envelope"></i> Messages</a>
                 <a class="active" href="notifications.php"><i class="fa-solid fa-bell"></i> Announcement</a>
@@ -118,7 +118,7 @@ $notifications = mysqli_query($con, "SELECT id, title, message, audience, create
                         <label>Message<textarea name="message" required placeholder="Write a useful, clear update..."></textarea></label>
                         <label>Audience<select name="audience">
                             <option value="all">Everyone</option>
-                            <option value="students">Students only</option>
+                            <option value="students">Guest only</option>
                             <option value="teachers">Teachers only</option>
                         </select></label>
                         <button class="primary" type="submit">Publish notification</button>

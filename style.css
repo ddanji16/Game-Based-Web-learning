@@ -947,6 +947,23 @@ h2 {
   color: var(--muted);
   font-size: 13px;
 }
+
+.difficulty {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 10px 0 0;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.difficulty.easy { color: #166534; background: #dcfce7; }
+.difficulty.medium { color: #92400e; background: #fef3c7; }
+.difficulty.hard { color: #991b1b; background: #fee2e2; }
 .module-card a,
 .live-course a {
   display: inline-block;

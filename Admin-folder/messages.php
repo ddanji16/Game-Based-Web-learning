@@ -73,7 +73,7 @@ $messages = mysqli_query($con, "SELECT id, name, email, subject, message, is_rea
             <a class="brand" href="Dashboard.php"><span class="brand-mark">J</span><span>Jidanao <b>LMS</b></span></a>
             <nav>
                 <a href="Dashboard.php"><i class="fa-solid fa-grid-2"></i> Overview</a>
-                <a href="Dashboard.php#courses"><i class="fa-solid fa-book-open"></i> Courses</a>
+                <a href="courses.php"><i class="fa-solid fa-book-open"></i> Courses</a>
                 <a href="users.php"><i class="fa-solid fa-users"></i> Users</a>
                 <a class="active" href="messages.php"><i class="fa-solid fa-envelope"></i> Messages</a>
 <a href="notifications.php"><i class="fa-solid fa-bell"></i> Announcement</a>

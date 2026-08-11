@@ -325,7 +325,7 @@ $progress = mysqli_query(
         >
         <nav>
 <a href="Dashboard.php"><i class="fa-solid fa-grid-2"></i> Overview</a>
-          <a href="Dashboard.php#courses"><i class="fa-solid fa-book-open"></i> Courses</a>
+          <a href="courses.php"><i class="fa-solid fa-book-open"></i> Courses</a>
           <a class="active" href="users.php"><i class="fa-solid fa-users"></i> Users</a>
           <a href="messages.php"><i class="fa-solid fa-envelope"></i> Messages</a>
           <a href="notifications.php"><i class="fa-solid fa-bell"></i> Announcement</a>
