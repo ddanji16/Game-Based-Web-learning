@@ -91,7 +91,7 @@ $notifications = mysqli_query($con, "SELECT id, title, message, audience, create
                 <button class="menu-btn" id="menuButton" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
                 <div>
                     <p class="eyebrow">ADMINISTRATOR PORTAL</p>
-                    <h1>Notifications</h1>
+                    <h1>Announcements Notifications</h1>
                     <p class="subtle">Publish updates and manage announcements for your community.</p>
                 </div>
             </header>

@@ -545,7 +545,7 @@ textarea {
   border-top: 0;
 }
 .notice-icon {
-  width: 31px;
+  width: 31px; 
   height: 31px;
   flex: 0 0 31px;
   display: grid;

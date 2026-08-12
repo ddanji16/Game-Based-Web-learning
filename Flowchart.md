@@ -76,7 +76,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A([Open Dashboard.php]) --> B{Is usertype Admin (1)?}
+    A([Open Dashboard.php]) --> B{"Is usertype Admin (1)?"}
     B -- No --> C[Redirect to login.php]
     B -- Yes --> D[Ensure LMS tables exist]
     D --> E{POST action?}
@@ -224,13 +224,7 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph Visitor
-        V1[Browse Home] --> V2[Contact Form]
-        V2 -->|Save| DB[(contact_messages)]
-        V1 --> V3[Register]
-        V3 -->|Insert| DB[(users)]
-        V1 --> V4[Login]
-    end
+    
 
     subgraph Auth
         V4 --> P{Verify Credentials}

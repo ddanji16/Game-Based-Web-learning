@@ -87,7 +87,7 @@ $messages = mysqli_query($con, "SELECT id, name, email, subject, message, is_rea
                 <button class="menu-btn" id="menuButton" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
                 <div>
                     <p class="eyebrow">ADMINISTRATOR PORTAL</p>
-                    <h1>Messages</h1>
+                    <h1>Students Messages</h1>
                     <p class="subtle">Contact messages sent from the home page.</p>
                 </div>
             </header>
