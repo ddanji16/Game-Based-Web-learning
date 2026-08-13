@@ -114,7 +114,7 @@ $initial = strtoupper(substr($profile['Firstname'], 0, 1));
 <body>
     <header class="topbar">
         <a href="index.php" class="brand"><span><i class="fa-solid fa-graduation-cap"></i></span>Jidanao <b>LMS</b></a>
-              <nav><a href="./Student-folder/index.php"><i class="fa-solid fa-house"></i>My Achievements</a>
+              <nav><a href="./Student-folder/index.php"><i class="fa-solid fa-house"></i>Dashboard</a>
         <nav><a href="index.php"><i class="fa-solid fa-house"></i> Home</a>
         <a class="logout" href="logout.php"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></nav>
     </header>

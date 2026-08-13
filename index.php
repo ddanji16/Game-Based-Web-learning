@@ -470,8 +470,7 @@ if (homeTableExists($con, 'notifications')) {
             <h3><?= homeE($course['title']) ?></h3>
             <small
               ><?= homeE($course['description'] ?: 'A new learning space is ready for learners.') ?></small
-            ><a href="<?= homeE($portalLink) ?>"
-              >View course <i class="fa-solid fa-arrow-right"></i
+            ><a href="./Student-folder/index.php">Enroll course <i class="fa-solid fa-arrow-right"></i
             ></a>
           </article>
           <?php endforeach; else: ?>

@@ -250,7 +250,7 @@ $notifications = mysqli_query($con, "SELECT title, message, audience, created_at
                 <article>
                     <span class="stat-icon green"><i class="fa-solid fa-link"></i></span>
                     <div>
-                        <small>Enrollments</small>
+                        <small>Total Courses</small>
                         <strong> <?= (int) $stats['enrollments'] ?> </strong>
                         <em>Course registrations</em>
                     </div>
